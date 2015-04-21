@@ -52,4 +52,10 @@ public class MainActivity2Activity extends ActionBarActivity {
         startActivity(intent);
     }
 
+    public void startGpsBasics(View v)
+    {
+        Intent intent = new Intent(this, GpsBasics.class);
+        startActivity(intent);
+    }
+
 }

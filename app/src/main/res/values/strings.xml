@@ -15,4 +15,5 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_display_accelerometer_data">DisplayAccelerometerData</string>
+    <string name="title_activity_gps_basics">GpsBasics</string>
 </resources>

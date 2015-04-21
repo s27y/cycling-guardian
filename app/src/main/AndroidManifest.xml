@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="yangsun.me.cyclingguardian" >
+
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -24,6 +26,11 @@
         <activity
             android:name=".DisplayAccelerometerData"
             android:label="@string/title_activity_display_accelerometer_data" >
+        </activity>
+        <activity
+            android:name=".GpsBasics"
+            android:label="@string/title_activity_gps_basics"
+            >
         </activity>
     </application>
 
