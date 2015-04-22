@@ -6,6 +6,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Handler;
+import android.util.Log;
 
 
 /**
@@ -51,7 +52,6 @@ public class MyAccelerometer implements SensorEventListener {
         gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
         gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
         gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
-
         // Remove the gravity contribution with the high-pass filter.
         linear_acceleration[0] = event.values[0] - gravity[0];
         linear_acceleration[1] = event.values[1] - gravity[1];
@@ -65,7 +65,7 @@ public class MyAccelerometer implements SensorEventListener {
         float currentValue = Float.parseFloat(Math.sqrt(x * x + y * y + z * z) + "");
         float threshold = 2;
         boolean flag = false;
-
+        maxValue = currentValue;
         if (currentValue > threshold ) {
             maxValue = currentValue;
         }

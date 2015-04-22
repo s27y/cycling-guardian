@@ -28,7 +28,6 @@ public class GpsBasics extends Activity implements LocationListener {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
                 /* CAL METHOD requestLocationUpdates */
-
             // Parameters :
             //   First(provider)    :  the name of the provider with which to register
             //   Second(minTime)    :  the minimum time interval for notifications,

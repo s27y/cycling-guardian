@@ -77,24 +77,36 @@
         android:id="@+id/send_sms_button"
         android:onClick="sendSMSMessage"
         android:layout_gravity="center_horizontal" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lastUpdateTime_textView"
+        android:text="longitude_textView"
+        android:layout_gravity="center_horizontal" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/mLatitudeText"
-        android:text="mLatitudeText"
+        android:id="@+id/latitude_textView"
+        android:text="latitude_textView"
         android:layout_gravity="center_horizontal" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/mLongitudeText"
-        android:text="mLongitudeText"
+        android:id="@+id/longitude_textView"
+        android:text="longitude_textView"
+        android:layout_gravity="center_horizontal" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/_textView"
+        android:text="_textView"
         android:layout_gravity="center_horizontal" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Get Location"
-        android:id="@+id/get_location_button"
-        android:onClick="getLocation"
+        android:text="Turn ON Location"
+        android:id="@+id/turnLocationOnOff_button"
+        android:onClick="setButtonsEnabledState"
         android:layout_gravity="center_horizontal" />
 </LinearLayout>

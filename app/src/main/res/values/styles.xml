@@ -3,6 +3,22 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+        <item name="android:textColorHighlight">#9933b5e5</item>
+        <item name="android:textSelectHandleLeft">@drawable/my_theme_text_select_handle_left</item>
+        <item name="android:textSelectHandleRight">@drawable/my_theme_text_select_handle_right</item>
+        <item name="android:textSelectHandle">@drawable/my_theme_text_select_handle_middle</item>
     </style>
+
+
+
+
+
+
+
+
+
+
+
+
 
 </resources>
