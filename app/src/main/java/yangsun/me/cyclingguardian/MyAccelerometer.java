@@ -18,6 +18,8 @@ public class MyAccelerometer implements SensorEventListener {
      Sensor mAccelerometer;
      Handler mHandler;
     private float maxValue;
+    private float averageValue;
+    private int numberOfSample;
 
 
     public MyAccelerometer(SensorManager sm,Handler handler) {
@@ -38,6 +40,11 @@ public class MyAccelerometer implements SensorEventListener {
     {
         return maxValue;
     }
+
+    public float getAverageValue() {
+        float temp = averageValue;
+        averageValue = 0;
+        return temp; }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -65,9 +72,18 @@ public class MyAccelerometer implements SensorEventListener {
         float currentValue = Float.parseFloat(Math.sqrt(x * x + y * y + z * z) + "");
         float threshold = 2;
         boolean flag = false;
+        if (averageValue == 0) {
+            averageValue += currentValue;
+        }
+        else
+        {
+            averageValue = (averageValue+currentValue)/2F;
+        }
+
         maxValue = currentValue;
+
+
         if (currentValue > threshold ) {
-            maxValue = currentValue;
         }
         return flag;
 

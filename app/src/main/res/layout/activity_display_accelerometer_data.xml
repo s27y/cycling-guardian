@@ -2,72 +2,18 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
+
     <TextView
-        android:paddingTop="20dip"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:text="Shaker Demo"/>
-    <TableLayout
-        android:paddingTop="10dip"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:stretchColumns="*">
-        <TableRow>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="X-Axis"
-                android:gravity="center"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-
-                android:text="Y-Axis"
-
-                android:gravity="center"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="Z-Axis"
-                android:gravity="center"/>
-        </TableRow>
-        <TableRow>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/x_axis"
-                android:gravity="center"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/y_axis"
-                android:gravity="center"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/z_axis"
-                android:gravity="center"/>
-        </TableRow>
-        <TableRow>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:id="@+id/cur_max_value_textView"
-                android:gravity="center"/>
-        </TableRow>
-    </TableLayout>
+        android:text="0"
+        android:id="@+id/cur_max_value_textView"
+        android:gravity="center"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/your_kin_phone_number"
-        android:text="0831621215"
+        android:text="0"
         android:gravity="center"/>
 
     <Button
@@ -99,14 +45,91 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/_textView"
-        android:text="_textView"
+        android:id="@+id/locationAddressLbl_textView"
+        android:text="Current Address"
         android:layout_gravity="center_horizontal" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/locationAddress_textView"
+        android:text="None"
+        android:layout_gravity="center_horizontal" />
+
+
+
+
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Turn ON Location"
         android:id="@+id/turnLocationOnOff_button"
-        android:onClick="setButtonsEnabledState"
+        android:onClick="turnLocationOnOffHandler"
         android:layout_gravity="center_horizontal" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fetch Location Address"
+        android:id="@+id/fetchLoactionAddress_button"
+        android:onClick="fetchAddressButtonHandler"
+        android:layout_gravity="center_horizontal" />
+
+
+
+    <TableLayout
+        android:paddingTop="10dip"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*">
+        <TableRow>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/currentSpeedLbl_textView"
+                android:text="Current Speed"
+                android:layout_gravity="center_horizontal" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/averageSpeedLbl_textView"
+                android:text="Average Speed"
+                android:layout_gravity="center_horizontal" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tripDistanceLbl_textView"
+                android:text="Trip Distance"
+                android:layout_gravity="center_horizontal" />
+
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/currentSpeed_textView"
+                android:text="-"
+                android:layout_gravity="center_horizontal" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/averageSpeed_textView"
+                android:text="-"
+                android:layout_gravity="center_horizontal" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tripDistance_textView"
+                android:text="-"
+                android:layout_gravity="center_horizontal" />
+
+        </TableRow>
+
+    </TableLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_gravity="right" />
 </LinearLayout>
