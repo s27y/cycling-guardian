@@ -4,6 +4,7 @@ package yangsun.me.cyclingguardian;
  * Created by yangsun on 22/04/15.
  */
 public final class Constants {
+    public static final boolean IS_DEBUG = false;
     public static final int SUCCESS_RESULT = 0;
     public static final int FAILURE_RESULT = 1;
     public static final String PACKAGE_NAME =
@@ -33,4 +34,10 @@ public final class Constants {
             ".TRIP_DISTANCE_DOUBLE_KEY";
     public static final String CURRENT_SPEED_DOUBLE_KEY = PACKAGE_NAME+
             ".CURRENT_SPEED_DOUBLE_KEY";
+    public static final String PREFERENCE_USER_NAME_KEY = PACKAGE_NAME+
+            ".PREFERENCE_USER_NAME_KEY";
+    public static final String PHONE_NUMBER_MESSAGE = PACKAGE_NAME+
+            ".PHONE_NUMBER_MESSAGE";
+    public static final String USER_NAME_MESSAGE = PACKAGE_NAME+
+            ".USER_NAME_MESSAGE";
 }

@@ -19,7 +19,8 @@ public class MyAccelerometer implements SensorEventListener {
      Handler mHandler;
     private float maxValue;
     private float averageValue;
-    private int numberOfSample;
+    private float totalValue;
+    private float numberOfSample;
 
 
     public MyAccelerometer(SensorManager sm,Handler handler) {
@@ -36,56 +37,29 @@ public class MyAccelerometer implements SensorEventListener {
         return mAccelerometer;
     }
 
-    public float getMaxValue()
+    public float getAverageValue()
     {
-        return maxValue;
-    }
+        float returnVal = totalValue/numberOfSample;
+        numberOfSample = 0;
+        totalValue = 0;
 
-    public float getAverageValue() {
-        float temp = averageValue;
-        averageValue = 0;
-        return temp; }
+        return returnVal;
+    }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        // In this example, alpha is calculated as t / (t + dT),
-        // where t is the low-pass filter's time-constant and
-        // dT is the event delivery rate.
-        float alpha = 0.8F;
-        float[] gravity = new float[3];
-        float[] linear_acceleration = new float[3];
 
-        // Isolate the force of gravity with the low-pass filter.
-        gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
-        gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
-        gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
-        // Remove the gravity contribution with the high-pass filter.
-        linear_acceleration[0] = event.values[0] - gravity[0];
-        linear_acceleration[1] = event.values[1] - gravity[1];
-        linear_acceleration[2] = event.values[2] - gravity[2];
 
-        this.isCrash(linear_acceleration[0],linear_acceleration[1],linear_acceleration[2]);
+        analysisData(event.values[0],event.values[1],event.values[2]);
     }
 
 
-    public boolean isCrash(float x, float y, float z) {
+    public boolean analysisData(float x, float y, float z) {
         float currentValue = Float.parseFloat(Math.sqrt(x * x + y * y + z * z) + "");
-        float threshold = 2;
-        boolean flag = false;
-        if (averageValue == 0) {
-            averageValue += currentValue;
-        }
-        else
-        {
-            averageValue = (averageValue+currentValue)/2F;
-        }
+        totalValue += currentValue;
+        numberOfSample++;
 
-        maxValue = currentValue;
-
-
-        if (currentValue > threshold ) {
-        }
-        return flag;
+        return true;
 
     }
 

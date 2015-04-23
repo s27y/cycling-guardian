@@ -23,6 +23,17 @@
         android:id="@+id/send_sms_button"
         android:onClick="sendSMSMessage"
         android:layout_gravity="center_horizontal" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Play sound"
+        android:id="@+id/playSound_button"
+        android:onClick="playSound"
+        android:layout_gravity="center_horizontal" />
+
+
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -109,21 +120,35 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/currentSpeed_textView"
                 android:text="-"
+                android:textSize="30sp"
                 android:layout_gravity="center_horizontal" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/averageSpeed_textView"
                 android:text="-"
+                android:textSize="30sp"
                 android:layout_gravity="center_horizontal" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/tripDistance_textView"
                 android:text="-"
+                android:textSize="30sp"
                 android:layout_gravity="center_horizontal" />
 
         </TableRow>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tripTime_textView"
+            android:text="-"
+            android:textSize="30sp"
+            android:layout_gravity="center_horizontal" />
+        <TableRow>
+
+        </TableRow>
+
 
     </TableLayout>
 

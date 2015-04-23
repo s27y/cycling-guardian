@@ -9,14 +9,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.content.Intent;
 import android.widget.EditText;
-import android.widget.TextView;
 
 
-public class MainActivity2Activity extends ActionBarActivity {
+public class LandingActivity extends ActionBarActivity {
     public final static String PHONE_NUMBER_MESSAGE = "me.yangsun.cyclingguardian.PHONE_NUMBER_MESSAGE";
-    EditText editText;
+    EditText mPhoneNumberEditText;
+    EditText mUserNameEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +24,14 @@ public class MainActivity2Activity extends ActionBarActivity {
 
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         String phoneNumber = sharedPref.getString(Constants.PREFERENCE_PHONE_NUMBER_KEY,"");
+        String username = sharedPref.getString(Constants.PREFERENCE_USER_NAME_KEY, "");
         Log.i("phone_number", "from last session "+phoneNumber);
-        editText = (EditText) findViewById(R.id.phone_number_editText);
-        editText.setText(phoneNumber);
+        Log.i("user_name", "from last session "+username);
+
+        mPhoneNumberEditText = (EditText) findViewById(R.id.phone_number_editText);
+        mPhoneNumberEditText.setText(phoneNumber);
+        mUserNameEditText = (EditText) findViewById(R.id.name_editText);
+        mPhoneNumberEditText.setText(username);
     }
 
     public void updatePhoneNumber(String phoneNumberStr)
@@ -36,6 +40,15 @@ public class MainActivity2Activity extends ActionBarActivity {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(Constants.PREFERENCE_PHONE_NUMBER_KEY, phoneNumberStr);
         Log.i("phone_number","commit "+ phoneNumberStr);
+        editor.commit();
+    }
+
+    public void updateName(String nameStr)
+    {
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(Constants.PREFERENCE_USER_NAME_KEY, nameStr);
+        Log.i("user_name","commit "+ nameStr);
         editor.commit();
     }
 
@@ -62,18 +75,24 @@ public class MainActivity2Activity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void startSmsNofity(View view)
+    public void startMainActivity(View view)
     {
 
         Intent intent = new Intent(this, DisplayAccelerometerData.class);
 
-        String message = editText.getText().toString();
-        Log.i("phone_number", message);
-        intent.putExtra(PHONE_NUMBER_MESSAGE, message);
-        startActivity(intent);
-        updatePhoneNumber(message);
-    }
+        String phoneNumber = mPhoneNumberEditText.getText().toString();
+        String username = mUserNameEditText.getText().toString();
+        Log.i("phone_number", phoneNumber);
+        Log.i("user_name", username);
+        intent.putExtra(Constants.PHONE_NUMBER_MESSAGE, phoneNumber);
+        intent.putExtra(Constants.USER_NAME_MESSAGE, username);
+        updatePhoneNumber(phoneNumber);
+        updateName(username);
 
+        startActivity(intent);
+
+    }
+    //for testing gps
     public void startGpsBasics(View v)
     {
         Intent intent = new Intent(this, GpsBasics.class);
