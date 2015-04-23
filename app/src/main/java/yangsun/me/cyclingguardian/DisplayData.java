@@ -37,10 +37,11 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class DisplayAccelerometerData extends ActionBarActivity implements
+public class DisplayData extends ActionBarActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     TextView phoneNumberTextView;
+    TextView mUserNameTextView;
     TextView curAccelerateTextView;
     TextView currentAddressTextView;
     TextView mCurrentSpeedTextView;
@@ -80,6 +81,7 @@ public class DisplayAccelerometerData extends ActionBarActivity implements
     private Time mFinishTime = new Time();
     private double mCurrentSpeed;
     private String mKinPhoneNumber;
+    private String mUsername;
     CrashDetector mCrashDetector;
     boolean alertPlaying = false;
     int countAfterCrash = 0;
@@ -93,23 +95,27 @@ public class DisplayAccelerometerData extends ActionBarActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_display_accelerometer_data);
+        setContentView(R.layout.activity_display_data);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         Intent intent = getIntent();
-        String message = intent.getStringExtra(LandingActivity.PHONE_NUMBER_MESSAGE);
+        String phoneNumberStr = intent.getStringExtra(Constants.PHONE_NUMBER_MESSAGE);
+        String userNameStr = intent.getStringExtra(Constants.USER_NAME_MESSAGE);
+        mKinPhoneNumber = phoneNumberStr;
+        mUsername = userNameStr;
 
         curAccelerateTextView =
                 (TextView) findViewById(R.id.cur_max_value_textView);
 
-        currentAddressTextView = (TextView)findViewById(R.id.locationAddress_textView);
+        currentAddressTextView = (TextView) findViewById(R.id.locationAddress_textView);
         mTurnLocationOnOffBtn = (Button) findViewById(R.id.turnLocationOnOff_button);
         phoneNumberTextView = (TextView) findViewById(R.id.your_kin_phone_number);
-        mCurrentSpeedTextView = (TextView)findViewById(R.id.currentSpeed_textView);
+        mUserNameTextView = (TextView) findViewById(R.id.userName_textView);
+        mCurrentSpeedTextView = (TextView) findViewById(R.id.currentSpeed_textView);
 
-        mAverageSpeedTextView = (TextView)findViewById(R.id.averageSpeed_textView);
-        mTripDistanceTextView = (TextView)findViewById(R.id.tripDistance_textView);
-        mTripTimTextView = (TextView)findViewById(R.id.tripTime_textView);
+        mAverageSpeedTextView = (TextView) findViewById(R.id.averageSpeed_textView);
+        mTripDistanceTextView = (TextView) findViewById(R.id.tripDistance_textView);
+        mTripTimTextView = (TextView) findViewById(R.id.tripTime_textView);
 
 
         mSendSmsBtn = (Button) findViewById(R.id.send_sms_button);
@@ -117,16 +123,15 @@ public class DisplayAccelerometerData extends ActionBarActivity implements
         mFetchLocationAddressBtn = (Button) findViewById(R.id.fetchLoactionAddress_button);
 
 
-        if(!Constants.IS_DEBUG)
-        {
+        if (!Constants.IS_DEBUG) {
             mSendSmsBtn.setVisibility(View.GONE);
             mPlaySoundBtn.setVisibility(View.GONE);
             mFetchLocationAddressBtn.setVisibility(View.GONE);
             curAccelerateTextView.setVisibility(View.GONE);
         }
 
-        mKinPhoneNumber = message;
-        phoneNumberTextView.setText(message);
+        phoneNumberTextView.setText(phoneNumberStr);
+        mUserNameTextView.setText(userNameStr);
         Typeface font = Typeface.createFromAsset(getAssets(), "RADIOLAND.ttf");
         mCurrentSpeedTextView.setTypeface(font);
         mAverageSpeedTextView.setTypeface(font);
@@ -136,45 +141,41 @@ public class DisplayAccelerometerData extends ActionBarActivity implements
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = new MyAccelerometer(mSensorManager, mHandler);
-        mLocationManager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        mCrashDetector = new CrashDetector(10.5,13);
+        mCrashDetector = new CrashDetector(10.5, 13);
         final Activity a = this;
-        
+
 
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
 
-                if (mIsTripStarted)
-                {
+                if (mIsTripStarted) {
                     Time currentTime = new Time();
                     currentTime.setToNow();
                     long millis = currentTime.toMillis(false) - mStartTime.toMillis(false);
                     int seconds = (int) (millis / 1000);
                     int minutes = seconds / 60;
-                    seconds     = seconds % 60;
+                    seconds = seconds % 60;
 
                     mTripTimTextView.setText(String.format("%d:%02d", minutes, seconds));
                 }
-                
-                
+
+
                 float aF = mAccelerometer.getAverageValue();
                 mCurrentAccelerate = aF + "";
-                if (aF > 13)
-                {
-                    Log.i("accelerate", "*************"+mCurrentAccelerate);
+                if (aF > 13) {
+                    Log.i("accelerate", "*************" + mCurrentAccelerate);
                     playSound(R.raw.soft_chime_beep);
                 }
 
                 curAccelerateTextView.setText(mCurrentAccelerate);
-                if(mIsTripStarted)
-                { ;
-                    if (mCrashDetector.addAccerationToList(aF) == true)
-                    {
+                if (mIsTripStarted) {
+                    ;
+                    if (mCrashDetector.addAccerationToList(aF) == true) {
                         //sendSMS(phoneNumberTextView.getText().toString(),"Impact");
-                        if (alertPlaying == false)
-                        {
+                        if (alertPlaying == false) {
                             alertPlaying = true;
                             playSound(R.raw.alarm_fire_detector_smoke_alarm_domestic);
                             final AlertDialog.Builder builder = new AlertDialog.Builder(a);
@@ -201,20 +202,17 @@ public class DisplayAccelerometerData extends ActionBarActivity implements
                                 @Override
                                 public void onFinish() {
                                     // TODO Auto-generated method stub
-                                    if (alert.isShowing())
-                                    {
+                                    if (alert.isShowing()) {
                                         alert.dismiss();
-                                        sendSMS(mKinPhoneNumber, "Your friend might have an accident,"+ mCurrentLocationAddress);
+                                        sendSMS(mKinPhoneNumber, "Your friend " + mUsername +
+                                                " might have an accident at " + mCurrentLocationAddress +
+                                                " (Lat " + mCurrentLocation.getLatitude() + " Long " + mCurrentLocation.getLongitude() + ")");
                                     }
                                 }
                             }.start();
-
-                        }
-                        else
-                        {
+                        } else {
                             countAfterCrash++;
-                            if (countAfterCrash > 5)
-                            {
+                            if (countAfterCrash > 5) {
                                 //alert.dismiss();
                             }
                         }
@@ -238,23 +236,20 @@ public class DisplayAccelerometerData extends ActionBarActivity implements
         updateValuesFromBundle(savedInstanceState);
     }
 
-    public void playSound(View v)
-    {
+    public void playSound(View v) {
 
         mMediaPlayer = MediaPlayer.create(this, R.raw.soft_chime_beep);
 
         mMediaPlayer.start();
     }
 
-    public void stopSound()
-    {
-         mMediaPlayer.stop();
+    public void stopSound() {
+        mMediaPlayer.stop();
     }
 
-    public void playSound(int id)
-    {
-         mMediaPlayer = MediaPlayer.create(this, id);
-    //R.raw.soft_chime_beep
+    public void playSound(int id) {
+        mMediaPlayer = MediaPlayer.create(this, id);
+        //R.raw.soft_chime_beep
         //R.raw.alarm_fire_detector_smoke_alarm_domestic
         mMediaPlayer.start();
     }
@@ -300,8 +295,7 @@ public class DisplayAccelerometerData extends ActionBarActivity implements
         //mSensorManager.unregisterListener(mAccelerometer);
     }
 
-    private void sendSMS(String phoneNumber, String msg)
-    {
+    private void sendSMS(String phoneNumber, String msg) {
         Log.i("Send SMS", "");
 
 
@@ -317,6 +311,7 @@ public class DisplayAccelerometerData extends ActionBarActivity implements
             e.printStackTrace();
         }
     }
+
     public void sendSMSMessage(View view) {
         Log.i("Send SMS", "");
 
@@ -348,6 +343,7 @@ public class DisplayAccelerometerData extends ActionBarActivity implements
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, this);
     }
+
     protected void stopLocationUpdates() {
         LocationServices.FusedLocationApi.removeLocationUpdates(
                 mGoogleApiClient, this);
@@ -361,16 +357,12 @@ public class DisplayAccelerometerData extends ActionBarActivity implements
     }
 
 
-
-
-    private String formatFloatOrDouble(float f)
-    {
+    private String formatFloatOrDouble(float f) {
         String s = String.format("%.2f", f);
         return s;
     }
 
-    private String formatFloatOrDouble(double D)
-    {
+    private String formatFloatOrDouble(double D) {
         String s = String.format("%.2f", D);
         return s;
     }
@@ -411,35 +403,31 @@ public class DisplayAccelerometerData extends ActionBarActivity implements
         mLastLocation = mCurrentLocation;
         mCurrentLocation = location;
         double curDistance;
-        if(mLastLocation != null)
-        {
-            curDistance = getDistance(mLastLocation.getLatitude(),mLastLocation.getLatitude(),
-                    mCurrentLocation.getLatitude(),mCurrentLocation.getLatitude());
-        }
-        else
-        {
-             curDistance = 0;
+        if (mLastLocation != null) {
+            curDistance = getDistance(mLastLocation.getLatitude(), mLastLocation.getLatitude(),
+                    mCurrentLocation.getLatitude(), mCurrentLocation.getLatitude());
+        } else {
+            curDistance = 0;
         }
         //only update current location address is the moved 50m
-        if ( curDistance >0.05)
-        {
+        if (curDistance > 0.05) {
             fetchAddress();
         }
-        mTotalDistance +=curDistance;
+        mTotalDistance += curDistance;
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
         Time t = new Time();
         t.setToNow();
-        double duration = (t.toMillis(false) - mStartTime.toMillis(false))/1000D/60D/60D;
+        double duration = (t.toMillis(false) - mStartTime.toMillis(false)) / 1000D / 60D / 60D;
 
         mCurrentSpeed = mCurrentLocation.getSpeed();
-        mAverageSpeed = (mCurrentSpeed + mAverageSpeed/mNumberOfUpdate)/2;
+        mAverageSpeed = (mCurrentSpeed + mAverageSpeed / mNumberOfUpdate) / 2;
 
         updateUI();
-        Log.i("distance", mTotalDistance+"");
-        Log.i("time","in hour "+duration);
+        Log.i("distance", mTotalDistance + "");
+        Log.i("time", "in hour " + duration);
         Log.i("speed", "average speed " + mAverageSpeed);
 
-        Log.i("location","Lat "+mCurrentLocation.getLatitude()+", Long "+mCurrentLocation.getLongitude()+", "+mCurrentLocation.getSpeed());
+        Log.i("location", "Lat " + mCurrentLocation.getLatitude() + ", Long " + mCurrentLocation.getLongitude() + ", " + mCurrentLocation.getSpeed());
 
 
     }
@@ -449,10 +437,10 @@ public class DisplayAccelerometerData extends ActionBarActivity implements
         double lonA = Math.toRadians(lon1);
         double latB = Math.toRadians(lat2);
         double lonB = Math.toRadians(lon2);
-        double cosAng = (Math.cos(latA) * Math.cos(latB) * Math.cos(lonB-lonA)) +
+        double cosAng = (Math.cos(latA) * Math.cos(latB) * Math.cos(lonB - lonA)) +
                 (Math.sin(latA) * Math.sin(latB));
         double ang = Math.acos(cosAng);
-        double dist = ang *6371;
+        double dist = ang * 6371;
         return dist;
     }
 
@@ -538,6 +526,7 @@ public class DisplayAccelerometerData extends ActionBarActivity implements
             updateUI();
         }
     }
+
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
@@ -556,15 +545,12 @@ public class DisplayAccelerometerData extends ActionBarActivity implements
         alert.show();
 
 
-
-
-
     }
 
     public void turnLocationOnOffHandler(View v) {
         if (mIsTripStarted == false) {
 
-            if (!mLocationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 buildAlertMessageNoGps();
             }
 
@@ -577,24 +563,23 @@ public class DisplayAccelerometerData extends ActionBarActivity implements
             mTimeElapsed = 0;
             mAverageSpeed = 0;
             mTotalDistance = 0;
-            if (mCurrentLocation != null)
-            {
+            if (mCurrentLocation != null) {
                 updateUI();
             }
-            
-            Log.d("time", Long.toString(mStartTime.toMillis(false)/1000));
+
+            Log.d("time", Long.toString(mStartTime.toMillis(false) / 1000));
         } else {
             this.mIsTripStarted = false;
             mTurnLocationOnOffBtn.setText("Turn ON location");
             stopLocationUpdates();
             mFinishTime.setToNow();
-            long finsihTimeInSec = mFinishTime.toMillis(false)/1000;
-            long startTimeInSec = mStartTime.toMillis(false)/1000;
-            Log.d("time", "activity "+Long.toString(finsihTimeInSec-startTimeInSec));
+            long finsihTimeInSec = mFinishTime.toMillis(false) / 1000;
+            long startTimeInSec = mStartTime.toMillis(false) / 1000;
+            Log.d("time", "activity " + Long.toString(finsihTimeInSec - startTimeInSec));
         }
     }
-    private void checkLocation()
-    {
+
+    private void checkLocation() {
         if (mIsTripStarted == false) {
             mTurnLocationOnOffBtn.setText("Turn OFF location");
         } else {
@@ -614,8 +599,7 @@ public class DisplayAccelerometerData extends ActionBarActivity implements
         fetchAddress();
     }
 
-    private void fetchAddress()
-    {
+    private void fetchAddress() {
         // Only start the service to fetch the address if GoogleApiClient is
         // connected.
         if (mGoogleApiClient.isConnected() && mLastLocation != null) {

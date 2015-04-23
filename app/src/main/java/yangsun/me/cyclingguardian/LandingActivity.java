@@ -20,7 +20,7 @@ public class LandingActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_activity2);
+        setContentView(R.layout.landing_activity);
 
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         String phoneNumber = sharedPref.getString(Constants.PREFERENCE_PHONE_NUMBER_KEY,"");
@@ -78,7 +78,7 @@ public class LandingActivity extends ActionBarActivity {
     public void startMainActivity(View view)
     {
 
-        Intent intent = new Intent(this, DisplayAccelerometerData.class);
+        Intent intent = new Intent(this, DisplayData.class);
 
         String phoneNumber = mPhoneNumberEditText.getText().toString();
         String username = mUserNameEditText.getText().toString();

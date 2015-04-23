@@ -21,7 +21,7 @@
         </activity>
         <activity
             android:screenOrientation="portrait"
-            android:name=".DisplayAccelerometerData"
+            android:name=".DisplayData"
             android:label="@string/title_activity_display_accelerometer_data" >
         </activity>
         <activity
