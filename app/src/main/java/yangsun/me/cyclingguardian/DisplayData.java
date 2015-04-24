@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.Image;
 import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.os.ResultReceiver;
@@ -22,6 +23,7 @@ import android.hardware.SensorManager;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.telephony.SmsManager;
@@ -49,6 +51,7 @@ public class DisplayData extends ActionBarActivity implements
     TextView mLongitudeTextView;
     TextView mLastUpdateTimeTextView;
     TextView mTripTimTextView;
+    ImageView mStartOrStopImageView;
 
     TextView mAverageSpeedTextView;
     TextView mTripDistanceTextView;
@@ -116,6 +119,11 @@ public class DisplayData extends ActionBarActivity implements
         mAverageSpeedTextView = (TextView) findViewById(R.id.averageSpeed_textView);
         mTripDistanceTextView = (TextView) findViewById(R.id.tripDistance_textView);
         mTripTimTextView = (TextView) findViewById(R.id.tripTime_textView);
+        mLatitudeTextView = (TextView) (this.findViewById(R.id.latitude_textView));
+        mLongitudeTextView = (TextView) (this.findViewById(R.id.longitude_textView));
+        mLastUpdateTimeTextView = (TextView) (this.findViewById(R.id.lastUpdateTime_textView));
+
+        mStartOrStopImageView = (ImageView)findViewById(R.id.startOrStop_imageView);
 
 
         mSendSmsBtn = (Button) findViewById(R.id.send_sms_button);
@@ -128,6 +136,7 @@ public class DisplayData extends ActionBarActivity implements
             mPlaySoundBtn.setVisibility(View.GONE);
             mFetchLocationAddressBtn.setVisibility(View.GONE);
             curAccelerateTextView.setVisibility(View.GONE);
+            mTurnLocationOnOffBtn.setVisibility(View.GONE);
         }
 
         phoneNumberTextView.setText(phoneNumberStr);
@@ -137,6 +146,8 @@ public class DisplayData extends ActionBarActivity implements
         mAverageSpeedTextView.setTypeface(font);
         mTripDistanceTextView.setTypeface(font);
         mTripTimTextView.setTypeface(font);
+        mLatitudeTextView.setTypeface(font);
+        mLongitudeTextView.setTypeface(font);
 
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -368,10 +379,6 @@ public class DisplayData extends ActionBarActivity implements
     }
 
     private void updateUI() {
-        mLatitudeTextView = (TextView) (this.findViewById(R.id.latitude_textView));
-        mLongitudeTextView = (TextView) (this.findViewById(R.id.longitude_textView));
-        mLastUpdateTimeTextView = (TextView) (this.findViewById(R.id.lastUpdateTime_textView));
-
         mLatitudeTextView.setText(String.valueOf(mCurrentLocation.getLatitude()));
         mLongitudeTextView.setText(String.valueOf(mCurrentLocation.getLongitude()));
         mLastUpdateTimeTextView.setText(mLastUpdateTime);
@@ -566,9 +573,11 @@ public class DisplayData extends ActionBarActivity implements
             if (mCurrentLocation != null) {
                 updateUI();
             }
-
+            mStartOrStopImageView.setImageResource(R.drawable.stop_icon);
             Log.d("time", Long.toString(mStartTime.toMillis(false) / 1000));
         } else {
+            mStartOrStopImageView.setImageResource(R.drawable.play_icon);
+
             this.mIsTripStarted = false;
             mTurnLocationOnOffBtn.setText("Turn ON location");
             stopLocationUpdates();
