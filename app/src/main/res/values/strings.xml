@@ -14,7 +14,7 @@
     <string name="title_landing_activity">Cycling Guardian</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_display_accelerometer_data">DisplayAccelerometerData</string>
+    <string name="title_activity_display_accelerometer_data">Display Data</string>
     <string name="title_activity_gps_basics">GpsBasics</string>
     <string name="service_not_available">No geocoder available</string>
     <string name="no_address_found">Sorry, no address found</string>

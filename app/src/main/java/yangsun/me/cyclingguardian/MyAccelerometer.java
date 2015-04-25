@@ -17,8 +17,6 @@ public class MyAccelerometer implements SensorEventListener {
      SensorManager mSensorManager;
      Sensor mAccelerometer;
      Handler mHandler;
-    private float maxValue;
-    private float averageValue;
     private float totalValue;
     private float numberOfSample;
 
@@ -28,7 +26,6 @@ public class MyAccelerometer implements SensorEventListener {
         mHandler = handler;
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-        maxValue = 0F;
 
     }
 

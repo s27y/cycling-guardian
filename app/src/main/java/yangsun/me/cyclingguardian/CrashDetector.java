@@ -1,23 +1,20 @@
 package yangsun.me.cyclingguardian;
 
-import java.util.ArrayList;
-
 /**
  * Created by yangsun on 23/04/15.
  */
 public class CrashDetector {
-    ArrayList<Double> mAccelerationList;
-    boolean isHighImpactDetected;
+    public static final int MAX_PEACE_COUNT_AFTER_SUSPICIOUS_FALL = 10;
+    public static final int TOTAL_COUNT_AFTER_SUSPICIOUS_FAIL = 15;
+    boolean isSuspiciousFallDetected;
     double mPeaceThreshold,mImpactThreshold;
-    int totalCountAfterImpact=0;
+    int totalCountAfterSuspiciousFall =0;
     int peaceCountAfterImpact = 0;
-
 
 
     public CrashDetector(double peaceThreshold, double impactThreshold)
     {
-        mAccelerationList = new ArrayList<>();
-        isHighImpactDetected = false;
+        isSuspiciousFallDetected = false;
         mPeaceThreshold = peaceThreshold;
         mImpactThreshold = impactThreshold;
 
@@ -25,69 +22,71 @@ public class CrashDetector {
 
     public boolean addAccerationToList(double acc)
     {
-        mAccelerationList.add(acc);
         if(acc > mImpactThreshold)
         {
-            isHighImpactDetected = true;
-            totalCountAfterImpact = 0;
+            isSuspiciousFallDetected = true;
+            totalCountAfterSuspiciousFall = 0;
             peaceCountAfterImpact = 0;
         }
-        else if(acc <mPeaceThreshold)
-        {
-            if(isHighImpactDetected == true)
-            {
-                if (totalCountAfterImpact > 15)
-                {
-                    if(peaceCountAfterImpact> 10)
-                    {
-                        isHighImpactDetected = false;
-                        totalCountAfterImpact = 0;
-                        peaceCountAfterImpact = 0;
-                        return true;
-                    }
-                    else
-                    {
-                        //NOT A IMPACT
-                        isHighImpactDetected = false;
-                        totalCountAfterImpact = 0;
-                        peaceCountAfterImpact = 0;
-                        return false;
+        else {
 
-                    }
-                }else
+            if(acc <mPeaceThreshold)
+            {
+                if(isSuspiciousFallDetected == true)
                 {
-                    totalCountAfterImpact++;
-                    peaceCountAfterImpact++;
+                    if (this.totalCountAfterSuspiciousFall >TOTAL_COUNT_AFTER_SUSPICIOUS_FAIL)
+                    {
+                        if(peaceCountAfterImpact> MAX_PEACE_COUNT_AFTER_SUSPICIOUS_FALL)
+                        {
+                            isSuspiciousFallDetected = false;
+                            this.totalCountAfterSuspiciousFall = 0;
+                            peaceCountAfterImpact = 0;
+                            return true;
+                        }
+                        else
+                        {
+                            //NOT A IMPACT
+                            isSuspiciousFallDetected = false;
+                            this.totalCountAfterSuspiciousFall = 0;
+                            peaceCountAfterImpact = 0;
+                            return false;
+
+                        }
+                    }else
+                    {
+                        this.totalCountAfterSuspiciousFall++;
+                        peaceCountAfterImpact++;
+                    }
                 }
             }
-        }
-        else
-        {
-            if(isHighImpactDetected)
+            else
             {
-                if (totalCountAfterImpact > 15)
+                if(isSuspiciousFallDetected)
                 {
-                    if(peaceCountAfterImpact> 10) {
-                        isHighImpactDetected = false;
-                        totalCountAfterImpact = 0;
-                        peaceCountAfterImpact = 0;
-                        return true;
-                    }
-                    else
+                    if (this.totalCountAfterSuspiciousFall > TOTAL_COUNT_AFTER_SUSPICIOUS_FAIL)
                     {
-                        //NOT A IMPACT
-                        isHighImpactDetected = false;
-                        totalCountAfterImpact = 0;
-                        peaceCountAfterImpact = 0;
-                        return false;
+                        if(peaceCountAfterImpact> MAX_PEACE_COUNT_AFTER_SUSPICIOUS_FALL) {
+                            isSuspiciousFallDetected = false;
+                            this.totalCountAfterSuspiciousFall = 0;
+                            peaceCountAfterImpact = 0;
+                            return true;
+                        }
+                        else
+                        {
+                            //NOT A IMPACT
+                            isSuspiciousFallDetected = false;
+                            this.totalCountAfterSuspiciousFall = 0;
+                            peaceCountAfterImpact = 0;
+                            return false;
+                        }
+
+
+                    }else
+                    {
+                        this.totalCountAfterSuspiciousFall++;
                     }
 
-
-                }else
-                {
-                    totalCountAfterImpact++;
                 }
-
             }
         }
         return false;
